@@ -1,6 +1,23 @@
 import React from 'react';
 import { TextField, Button } from '@mui/material';
 
+import InputAdornment from '@mui/material/InputAdornment';
+
+import { makeStyles } from '@mui/styles';
+
+
+const useStyles = makeStyles({
+  inputNote: {
+    marginRight: '0px',
+    borderLeft: 'none', // Supprimer la bordure gauche du TextField principal
+    paddingLeft: '0px', // Supprimer le padding gauche du TextField principal
+  },
+  noteInput: {
+    borderLeft: '1px solid rgba(0, 0, 0, 0.23)', // Ajouter une bordure à gauche pour l'InputAdornment
+    paddingLeft: '8px', // Ajouter du padding gauche pour l'InputAdornment
+  },
+});
+
 const MultipleChoiceQuestion = ({ sectionIndex, questionIndex, question, handleChange, handleAddOption1 ,handleAddOption2 }) => {
 
     const handleAddSuggestion = () => {
@@ -8,11 +25,9 @@ const MultipleChoiceQuestion = ({ sectionIndex, questionIndex, question, handleC
         handleAddOption1(sectionIndex, questionIndex, 'suggestions', newSuggestion);
     };
 
-    const handleAddCorrectResponse = () => {
 
-        const newCorrectResponse = { correct: '', questionId: question.id }; // Ajoutez l'ID de la question
-        handleAddOption2(sectionIndex, questionIndex, 'correctResponses' ,newCorrectResponse);
-    };
+
+    const classes = useStyles();
 
     return (
         <div>
@@ -35,6 +50,38 @@ const MultipleChoiceQuestion = ({ sectionIndex, questionIndex, question, handleC
                     fullWidth
                     variant="outlined"
                     size="small"
+
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end" className={classes.inputNote}>
+                          <TextField
+              type="number"
+              label="Note"
+              value={suggestion?.note || ''}
+              onChange={(e) => {
+                const newNote = e.target.value === "0" ? "0" : parseInt(e.target.value); // Convertir la valeur en entier si ce n'est pas "0"
+                if (!isNaN(newNote) && newNote >= 0 && newNote <= 10) {
+                  const newQuestion = { ...question };
+                  if (newQuestion.suggestions && typeof newQuestion.suggestions[suggestionIndex] === 'object') {
+                    newQuestion.suggestions[suggestionIndex].note = newNote;
+                    handleChange(sectionIndex, `questions.${questionIndex}`, newQuestion);
+                  } else {
+                    console.error('suggestions[suggestionIndex] is not defined or not an object');
+                  }
+                } else {
+                  console.error('Invalid note value. Note should be between 0 and 10.');
+                }
+              }}
+
+              variant="outlined"
+              size="small"
+              InputProps={{
+                className: classes.noteInput,
+              }}
+            />
+                        </InputAdornment>
+                      ),
+                    }}
                 />
             ))}
             <Button
@@ -44,35 +91,9 @@ const MultipleChoiceQuestion = ({ sectionIndex, questionIndex, question, handleC
             >
                 Add Suggestion
             </Button>
-           {/* Bouton pour ajouter une réponse correcte */}
-   {question.correctResponses && question.correctResponses.map((correctResponse, correctResponseIndex) => (
-    <TextField
-        key={correctResponseIndex}
-        label="correctResponse"
-        value={correctResponse?.content || ''}
-        onChange={(e) => {
-            const newValue = e.target.value;
-            const newQuestion = { ...question };
-            if (newQuestion.correctResponses && typeof newQuestion.correctResponses[correctResponseIndex] === 'object') {
-                newQuestion.correctResponses[correctResponseIndex].content = newValue;
-                handleChange(sectionIndex,` questions.${questionIndex}`, newQuestion);
-            } else {
-                console.error('correctResponses[correctResponseIndex] is not defined or not an object');
-            }
-        }}
-        fullWidth
-        variant="outlined"
-        size="small"
-    />
-))}
 
-            <Button
-                variant="contained"
-                onClick={handleAddCorrectResponse}
-                style={{ backgroundColor: '#4caf50', color: '#fff', marginBottom: '10px' }}
-            >
-                Add Correct Response
-            </Button>
+
+
         </div>
     );
 };

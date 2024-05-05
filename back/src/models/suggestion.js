@@ -15,6 +15,10 @@ const Suggestion = sequelize.define('Suggestion', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  note:{
+    type :Sequelize.FLOAT,
+    allowNull: false,
+  },
   questionId: {
     type: Sequelize.INTEGER,
     allowNull: false,

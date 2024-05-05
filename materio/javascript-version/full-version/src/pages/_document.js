@@ -27,6 +27,14 @@ class CustomDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <script src='public/assets/js/bootstrap.min.js'></script>
+
+        <script src="public/code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script src="public/assets/js/custom.js"></script>
+
+      <script src="public/assets/js/callswitcher.js"></script>
+
         </body>
       </Html>
     )

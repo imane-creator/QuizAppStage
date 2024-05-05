@@ -35,5 +35,19 @@ console.log('dkhl section');
   }
 });
 
+router.get('/sections', async (req, res) => {
+  const quizId = req.query.quizId; // Récupérer le quizId depuis les paramètres de requête
+
+  try {
+    // Utiliser quizId pour filtrer les sections liées à ce quizId
+    const sections = await Section.findAll({ where: { quizId } });
+    res.status(200).json({ sections });
+  } catch (error) {
+    console.error('Error fetching sections:', error);
+    res.status(500).json({ error: 'Cannot fetch sections at the moment' });
+  }
+});
+
+
 
 module.exports = router;

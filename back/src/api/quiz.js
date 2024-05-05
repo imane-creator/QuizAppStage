@@ -25,5 +25,14 @@ router.post('/quiz', async (req, res) => {
     res.status(500).json({ error: 'Cannot create quiz at the moment' });
   }
 });
+router.get('/quiz', async (req, res) => {
+  try {
+    const quizzes = await Quiz.findAll(); // Récupérer tous les quiz, vous pouvez ajouter des conditions si nécessaire
+    res.status(200).json({ quizzes });
+  } catch (error) {
+    console.error('Error fetching quizzes:', error);
+    res.status(500).json({ error: 'Cannot fetch quizzes at the moment' });
+  }
+});
 
 module.exports = router;

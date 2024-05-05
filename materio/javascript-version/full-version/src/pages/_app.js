@@ -56,6 +56,15 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import '../../styles/style.css'
+import '../../styles/animation.css'
+import '../../styles/responsive.css'
+import '../../styles/bootstrap.min.css'
+import '../../styles/default.css'
+
+
+
+
 
 const clientSideEmotionCache = createEmotionCache()
 
